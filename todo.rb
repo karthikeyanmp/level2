@@ -23,7 +23,9 @@ class Todo
   end
 
   def to_displayable_string
-    [@descripiton, @due_date.to_s, @completed]
+    status = @completed ? "x" : nil
+    due_date = @due_date == Date.today ? nil : @due_date
+    "[#{status}] #{@descripiton} #{due_date}"
   end
 end
 
@@ -51,17 +53,9 @@ class TodosList
   def to_displayable_list
     todo_text = []
     @todos.each do |todo|
-      todo_tmp = todo.to_displayable_string
-
-      if (Date.parse(todo_tmp[1]) == Date.today)
-        todo_text.push "[x] " + todo_tmp[0] if todo_tmp[2]
-        todo_text.push "[ ] " + todo_tmp[0] if !todo_tmp[2]
-      else
-        todo_text.push "[x] " + todo_tmp[0] + " " + todo_tmp[1].to_s if todo_tmp[2]
-        todo_text.push "[ ] " + todo_tmp[0] + " " + todo_tmp[1].to_s if !todo_tmp[2]
-      end
+      todo_text << todo.to_displayable_string
     end
-    todo_text
+    todo_text.join("\n")
   end
 end
 
